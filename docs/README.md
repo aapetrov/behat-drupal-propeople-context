@@ -115,6 +115,27 @@ Then I fill the following:
 Then I press on element with text "Account" in "footer" region
 ```
 
+```gherkin
+Then I should see the link "Log in" in ".main-nav" element
+```
+
+```gherkin
+Then I should see the text "Title" in "#firest-main-content" element
+```
+
+```gherkin
+Then I should see the element "#first-article" in ".content" element
+```
+
+```gherkin
+Then I should not see the link "Log out" in ".main-nav" element
+```
+
+```gherkin
+##  Use this step to check that the text in the right element
+I should see the text "Title" in "//form[@id='ptp-user-registration-user-profile-form']/div/div[position() = 9]" element with XPath
+````
+
 ### Redirect context
 
 All scenarios, used steps from this context, should be tagged with `@redirect` tag.

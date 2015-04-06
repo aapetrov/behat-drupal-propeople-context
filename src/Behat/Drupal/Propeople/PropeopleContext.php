@@ -431,4 +431,137 @@ class PropeopleContext extends RawPropeopleContext
     {
         sleep($seconds);
     }
+
+    /**
+     * Check if there is a text inside specified element on the page.
+     *
+     * @Then /^I should see the link "([^"]*)" in "([^"]*)" element$/
+     */
+    public function iShouldSeeTheLinkInElement($link, $selector)
+    {
+        $session = $this->getSession();
+        $region_obj = $session->getPage()->find('css', $selector);
+
+        if (!$region_obj) {
+            throw new \Exception(sprintf("The element '%s' was not found on the page %s", $selector, $this->getSession()
+                ->getCurrentUrl()));
+        }
+
+        // Find the link within the region.
+        $region_link = $region_obj->findLink($link);
+
+        if (!$region_link) {
+            throw new \Exception(sprintf("The element '%s' was not found on the page %s", $selector, $this->getSession()
+                ->getCurrentUrl()));
+        }
+
+        if (strpos($region_link->getText(), $link) === FALSE) {
+            throw new \Exception(sprintf("The link '%s' was not found in the region '%s' on the page %s", $link, $selector, $this->getSession()
+                ->getCurrentUrl()));
+        }
+    }
+
+    /**
+     * Check if there is a text inside specified element on the page.
+     *
+     * @Then /^I should see the text "([^"]*)" in "([^"]*)" element$/
+     */
+    public function iShouldSeeTheTextInElement($text, $selector)
+    {
+        $session = $this->getSession();
+        $region_obj = $session->getPage()->find('css', $selector);
+
+        if (!$region_obj) {
+            throw new \Exception(sprintf("The element with '%s' selector was not found on the page %s.", $selector, $this->getSession()
+                ->getCurrentUrl()));
+        }
+
+        // Find the text within the region.
+        $region_text = $region_obj->getText();
+
+        if (strpos($region_text, $text) === FALSE) {
+            throw new \Exception(sprintf("The text '%s' was not found in the region '%s' on the page %s", $text, $selector, $this->getSession()
+                ->getCurrentUrl()));
+        }
+    }
+
+    /**
+     * Check if there is a text inside specified element on the page.
+     *
+     * @Then /^I should see the element "([^"]*)" in "([^"]*)" element$/
+     */
+    public function iShouldSeeTheElementInElement($selector1, $selector2)
+
+    {
+        $session = $this->getSession();
+        $region_obj = $session->getPage()->find('css', $selector2);
+
+        if (!$region_obj) {
+            throw new \Exception(sprintf("The element with '%s' selector was not found on the page %s.", $selector2, $this->getSession()
+                ->getCurrentUrl()));
+        }
+
+        // Find the text within the region.
+        $region_obj = $session->getPage()->find('css', $selector1);
+
+        if (!$region_obj) {
+            throw new \Exception(sprintf("The element with '%s' selector was not found on the page %s.", $selector1, $this->getSession()
+                ->getCurrentUrl()));
+        }
+    }
+
+    /**
+     * Check if there is no text inside specified element on the page.
+     *
+     * @Then /^I should not see the link "([^"]*)" in "([^"]*)" element$/
+     */
+    public function iShouldNotSeeTheLinkInElement($link, $selector)
+    {
+        $session = $this->getSession();
+        $region_obj = $session->getPage()->find('css', $selector);
+
+
+        if (!$region_obj) {
+            throw new \Exception(sprintf("The element '%s' was not found on the page %s", $selector, $this->getSession()
+                ->getCurrentUrl()));
+        }
+
+        // Find the text within the region.
+        if ($region_obj) {
+            $region_link = $region_obj->findLink($link);
+
+            if ($region_link) {
+                throw new \Exception(sprintf("The element '%s' was found on the page %s", $selector, $this->getSession()
+                    ->getCurrentUrl()));
+            }
+
+        }
+    }
+
+    /**
+     * Check if there is a text inside specified element on the page.
+     *
+     * @Then /^I should see the text "([^"]*)" in "([^"]*)" element with XPath$/
+     */
+    public function iShouldSeeTheTextInElementXPath($text, $xpath)
+    {
+        $session = $this->getSession();
+        $region_obj = $session->getPage()->find(
+            'xpath',
+            $session->getSelectorsHandler()->selectorToXpath('xpath', $xpath)
+        ); // runs the actual query and returns the element
+
+        // errors must not pass silently
+        if (null === $region_obj) {
+            throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', $xpath));
+        }
+
+        // Find the text within the region.
+        $region_text = $region_obj->getText();
+
+        if (strpos($region_text, $text) === FALSE) {
+            throw new \Exception(sprintf("The text '%s' was not found in the region '%s' on the page %s", $text, $xpath, $this->getSession()
+                ->getCurrentUrl()));
+        }
+    }
 }
